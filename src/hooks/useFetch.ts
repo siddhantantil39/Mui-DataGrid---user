@@ -26,6 +26,8 @@ function useFetch<T = unknown>(props: RequestProps) {
       });
       const json = await response.json();
       setData(json);
+      console.log(data)
+
     } catch (err) {
       if (err instanceof Error) {
         setError(err);

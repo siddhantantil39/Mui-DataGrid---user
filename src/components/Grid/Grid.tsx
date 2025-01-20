@@ -1,18 +1,22 @@
-import { Box, CircularProgress, Link, Typography } from '@mui/material';
+import { Box, Link, Typography } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import useFetch, { MethodType, RequestProps } from '../../hooks/useFetch';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import User from '../../types/User';
 import { useNavigate } from 'react-router-dom';
 import transformUser from '../../utils/transformUser';
 
 export type UserArrayResponse = {
     users: User[];
+    total: number;
 }
 
 
 const Grid = () => {
     const [rows, setRows] = useState<User[]>([]);
+    const [paginationModel, setPaginationModel] = useState({ pageSize: 5, page: 0 });
+    const [totalRows, setTotalRows] = useState(0);
+
     const navigate = useNavigate();
     const columns: GridColDef<(typeof rows)[number]>[] = [
         { field: 'id', headerName: 'ID', width: 90 },
@@ -40,7 +44,7 @@ const Grid = () => {
       ];
     
     const requestMethod: MethodType = "GET";
-    const url = "https://dummyjson.com/users";
+    const url = `https://dummyjson.com/users?skip=${paginationModel.page*paginationModel.pageSize}&limit=${paginationModel.pageSize}`;
     const request : RequestProps = {url: url, method: requestMethod};
 
     const { data, loading, error } = useFetch<UserArrayResponse>(request);
@@ -48,14 +52,15 @@ const Grid = () => {
     useEffect(() => {
         if (data && Array.isArray(data.users)) {
             setRows(transformUser(data.users));
+            setTotalRows(data.total);
           }
       }, [data]);
 
-    if(loading){
-        return <Box>
-            <CircularProgress size={150}/>
-        </Box>;
-    }
+      const handlePaginationModelChange = (newModel: { pageSize: number; page: number; }) => {
+        setPaginationModel(newModel);
+      };
+
+
     if(error) {
         return <Box>Error: {error.message}</Box>;
     }
@@ -66,19 +71,20 @@ const Grid = () => {
             <Typography variant='h1' sx={{ padding: '1rem', textAlign: 'initial'}}>Users</Typography>
             <Box sx={{ height: 400, width: '100%' }}>
                 <DataGrid
+                    sx={{' & .MuiDataGrid-cell': {
+                            color: "white",
+                            }
+                        }}
                     rows={rows}
                     columns={columns}
-                    initialState={{
-                    pagination: {
-                        paginationModel: {
-                        pageSize: 5,
-                        },
-                    },
-                    }}
+                    paginationModel={paginationModel}
                     pageSizeOptions={[5]}
                     checkboxSelection
                     disableRowSelectionOnClick
-                    // loading={loading}
+                    paginationMode="server"
+                    rowCount={totalRows}
+                    onPaginationModelChange={handlePaginationModelChange}
+                    loading={loading}
                 />
             </Box>
         </>
