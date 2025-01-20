@@ -1,8 +1,9 @@
+import { lazy } from 'react';
 import './App.css'
-import Details from './components/Details/Details';
-import Grid from './components/Grid/Grid'
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
+const Details = lazy(() => import('./components/Details/Details'));
+const Grid = lazy(() => import('./components/Grid/Grid'));
 
 function App() {
 
