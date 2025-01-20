@@ -21,10 +21,19 @@ const Grid = () => {
     const columns: GridColDef<(typeof rows)[number]>[] = [
         { field: 'id', headerName: 'ID', width: 90 },
         { field: 'firstName', headerName: 'First Name', width: 200 },
-        { field: 'email', headerName: 'Email', width: 400 },
+        { field: 'email', headerName: 'Email', width: 300 },
+        { field: 'role', headerName: 'Role', width: 100 },
+        { field: 'image',
+          headerName: 'Image',
+          width: 150,
+          renderCell: (params) => (
+            <img src={params.row.image} alt="user-image" width="50" height="50" />
+          )
+        },
+        { field: 'age', headerName: 'Age', width: 100, valueFormatter: (value) => `${value} years`  },
         { field: 'details',
           headerName: 'Details', 
-          width: 300,
+          width: 250,
           renderCell: (params) => (
             <Link
                 sx={{ fontWeight: 'bold'}}
@@ -46,6 +55,8 @@ const Grid = () => {
     
     const requestMethod: MethodType = "GET";
     const url = `https://dummyjson.com/users?skip=${paginationModel.page*paginationModel.pageSize}&limit=${paginationModel.pageSize}`;
+    // const url = `http://localhost:8081/api/user?page=${paginationModel.page}&size=${paginationModel.pageSize}`;
+
     const request : RequestProps = {url: url, method: requestMethod};
 
     const { data, loading, error } = useFetch<UserArrayResponse>(request);
@@ -54,6 +65,7 @@ const Grid = () => {
         if (data && Array.isArray(data.users)) {
             setRows(transformUser(data.users));
             setTotalRows(data.total);
+            console.log(data.users)
           }
       }, [data]);
 
