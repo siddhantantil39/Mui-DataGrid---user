@@ -1,7 +1,7 @@
 import { Box, Link, Typography } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import useFetch, { MethodType, RequestProps } from '../../hooks/useFetch';
-import { SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import User from '../../types/User';
 import { useNavigate } from 'react-router-dom';
 import transformUser from '../../utils/transformUser';
@@ -65,7 +65,6 @@ const Grid = () => {
     if(error) {
         return <Box>Error: {error.message}</Box>;
     }
-
 
     return(
         <>
