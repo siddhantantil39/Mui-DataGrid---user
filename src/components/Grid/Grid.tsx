@@ -83,10 +83,15 @@ const Grid = () => {
             <Typography variant='h1' sx={{ padding: '1rem', textAlign: 'initial'}}>Users</Typography>
             <Box sx={{ height: 400, width: '100%' }}>
                 <DataGrid
-                    sx={{' & .MuiDataGrid-cell': {
-                            color: "white",
-                            }
-                        }}
+                    sx={{
+                        '& .MuiDataGrid-cell': {
+                          color: 'white',
+                  
+                          '@media (prefers-color-scheme: light)': {
+                            color: 'black',
+                          },
+                        },
+                      }}
                     rows={rows}
                     columns={columns}
                     paginationModel={paginationModel}
