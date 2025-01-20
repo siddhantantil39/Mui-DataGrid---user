@@ -26,7 +26,8 @@ const Grid = () => {
           headerName: 'Details', 
           width: 300,
           renderCell: (params) => (
-            <Link 
+            <Link
+                sx={{ fontWeight: 'bold'}}
                 component="button"
                 underline='hover'
                 onClick={() => {
@@ -84,6 +85,8 @@ const Grid = () => {
                     rowCount={totalRows}
                     onPaginationModelChange={handlePaginationModelChange}
                     loading={loading}
+                    disableColumnFilter
+                    disableColumnSorting
                     
                 />
             </Box>
