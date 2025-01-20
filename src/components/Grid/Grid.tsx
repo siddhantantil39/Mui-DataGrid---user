@@ -79,12 +79,12 @@ const Grid = () => {
                     columns={columns}
                     paginationModel={paginationModel}
                     pageSizeOptions={[5]}
-                    checkboxSelection
                     disableRowSelectionOnClick
                     paginationMode="server"
                     rowCount={totalRows}
                     onPaginationModelChange={handlePaginationModelChange}
                     loading={loading}
+                    
                 />
             </Box>
         </>

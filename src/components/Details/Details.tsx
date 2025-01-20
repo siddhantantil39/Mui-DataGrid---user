@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import User from "../../types/User";
 import { useEffect, useState } from "react";
@@ -49,7 +49,15 @@ const Details = () => {
             <Typography>ID: {user?.id}</Typography>
             <Typography>Name: {user?.firstName}</Typography>
             <Typography>Email: {user?.email}</Typography>
+            <Button
+                sx={{ marginTop: 2, borderRadius: 5, color: "black", backgroundColor: "white" }}
+                variant="contained"
+                onClick={() => {
+                    navigate("/");
+                }}
+            >Go Back</Button>
         </Box>
+        
     );
 };
 

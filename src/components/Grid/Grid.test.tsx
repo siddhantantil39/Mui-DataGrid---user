@@ -81,7 +81,9 @@ describe('Grid Component', () => {
                         }
                     }
                 },
+
             ],
+            total: 2
         };
 
         mockUseFetch.mockReturnValue({
