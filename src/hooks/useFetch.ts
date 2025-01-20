@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import useDebounce from "./useDebounce";
-import transformUser from "../utils/transformUser";
 
 export type MethodType = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -9,9 +8,9 @@ export type RequestProps  = {
   method?: MethodType;
 }
 
-const useFetch = (props: RequestProps) => {
+function useFetch<T = unknown>(props: RequestProps) {
   const { url, method = "GET" } = props;
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -26,9 +25,7 @@ const useFetch = (props: RequestProps) => {
         },
       });
       const json = await response.json();
-      if (json.users && Array.isArray(json.users)) {
-        setData(transformUser(json.users));
-      }
+      setData(json);
     } catch (err) {
       if (err instanceof Error) {
         setError(err);

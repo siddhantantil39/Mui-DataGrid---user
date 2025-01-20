@@ -1,10 +1,14 @@
-import { Box, Link, Typography } from '@mui/material';
+import { Box, CircularProgress, Link, Typography } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import useFetch, { MethodType, RequestProps } from '../../hooks/useFetch';
 import { useEffect, useState } from 'react';
 import User from '../../types/User';
 import { useNavigate } from 'react-router-dom';
+import transformUser from '../../utils/transformUser';
 
+export type UserArrayResponse = {
+    users: User[];
+}
 
 
 const Grid = () => {
@@ -39,23 +43,22 @@ const Grid = () => {
     const url = "https://dummyjson.com/users";
     const request : RequestProps = {url: url, method: requestMethod};
 
-    const { data, loading, error } = useFetch(request);
+    const { data, loading, error } = useFetch<UserArrayResponse>(request);
 
     useEffect(() => {
-        if (data) {
-          setRows(data);
-        }
+        if (data && Array.isArray(data.users)) {
+            setRows(transformUser(data.users));
+          }
       }, [data]);
 
     if(loading){
-        return <Box>Loading</Box>;
+        return <Box>
+            <CircularProgress size={150}/>
+        </Box>;
     }
     if(error) {
         return <Box>Error: {error.message}</Box>;
     }
-
-    console.log(rows)
-
 
 
     return(
@@ -75,6 +78,7 @@ const Grid = () => {
                     pageSizeOptions={[5]}
                     checkboxSelection
                     disableRowSelectionOnClick
+                    // loading={loading}
                 />
             </Box>
         </>
